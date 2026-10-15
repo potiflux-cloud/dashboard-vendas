@@ -1,0 +1,191 @@
+/* ---------- Variáveis e reset ---------- */
+:root{
+  --bg:#f1f4f6;      /* fundo da página */
+  --card:#fff;       /* fundo dos cards */
+  --ink:#12202b;     /* cor do texto */
+  --mut:#5d6e7b;     /* texto secundário */
+  --line:#dde4e9;    /* bordas */
+  --ac:#0b7a86;      /* cor de destaque */
+  --ac2:#d6eef0;     /* destaque suave (fundo de barras) */
+  --up:#13804a;      /* positivo */
+  --dn:#c23b32;      /* negativo */
+  --prev:#9fb0bc;    /* linha do período anterior */
+  --warn:#a26d00;    /* pendente */
+  color-scheme:light;
+}
+
+/* Tema escuro automático, se o sistema estiver em modo escuro */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1a22;--card:#15252f;--ink:#e8eff3;--mut:#93a6b3;--line:#243844;
+    --ac:#3cc0cd;--ac2:#173a42;--up:#4cc98a;--dn:#f0877f;--prev:#587084;--warn:#e0b04a;
+    color-scheme:dark;
+  }
+}
+/* Tema escuro escolhido no botão */
+:root[data-theme="dark"]{
+  --bg:#0e1a22;--card:#15252f;--ink:#e8eff3;--mut:#93a6b3;--line:#243844;
+  --ac:#3cc0cd;--ac2:#173a42;--up:#4cc98a;--dn:#f0877f;--prev:#587084;--warn:#e0b04a;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:500 14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- Layout geral ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 48px}
+
+header{
+  display:flex;flex-wrap:wrap;gap:16px;
+  align-items:flex-end;justify-content:space-between;
+  margin-bottom:14px;
+}
+h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.02em}
+h2{font-size:16px;font-weight:700;margin:0 0 14px}
+.sub{color:var(--mut);margin:2px 0 0}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:14px;
+}
+
+/* ---------- Grids ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.kpis .card{margin-bottom:0}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.grid .card{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid2 .card{margin-bottom:0}
+
+/* ---------- Formulários e botões ---------- */
+select,button,input{
+  font:inherit;color:var(--ink);background:var(--card);
+  border:1px solid var(--line);border-radius:8px;
+  padding:8px 12px;
+}
+select,button{cursor:pointer}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.btn-p{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.actions.bar{margin-bottom:14px}
+.actions.end{justify-content:flex-end;margin-top:14px}
+
+/* ---------- KPIs ---------- */
+.kpi .l{color:var(--mut);font-weight:600}
+.kpi .v{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:4px 0}
+.d{font-weight:700;font-size:13px}
+.d.up{color:var(--up)}
+.d.dn{color:var(--dn)}
+.d span{color:var(--mut);font-weight:500}
+.kpi.main{border-left:4px solid var(--ac)}
+
+/* ---------- Meta e textos auxiliares ---------- */
+.hint{color:var(--mut);font-size:13px;margin:0 0 12px}
+.big{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:4px 0 8px}
+.meta-edit{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--mut);font-size:13px;margin-bottom:10px}
+.meta-edit input{width:100px;padding:6px 8px;text-align:right}
+
+/* ---------- Gráfico ---------- */
+.leg{display:flex;gap:16px;color:var(--mut);font-size:13px;margin-bottom:6px}
+.leg i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;background:var(--ac)}
+.leg i.p{background:var(--prev)}
+.chartbox{position:relative}
+svg{display:block;width:100%;height:auto}
+#tip{
+  position:absolute;pointer-events:none;
+  background:var(--ink);color:var(--bg);
+  padding:8px 10px;border-radius:8px;
+  font-size:12px;line-height:1.4;
+  opacity:0;white-space:nowrap;
+  transform:translate(-50%,-110%);
+}
+
+/* ---------- Barras (meta, canais, vendedores, funil) ---------- */
+.bar:not(.actions){height:8px;background:var(--ac2);border-radius:4px;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--ac);border-radius:4px}
+.bar b.ok{background:var(--up)}
+
+.row{display:grid;grid-template-columns:96px 1fr 96px 56px;gap:10px;align-items:center;padding:7px 0}
+.row .n{font-weight:600}
+.row .f{text-align:right;font-weight:700}
+.row .c{color:var(--mut);text-align:right}
+
+.fun{display:grid;gap:8px}
+.fun > div{display:grid;grid-template-columns:90px 1fr 110px;gap:10px;align-items:center}
+.fun .bar:not(.actions){height:26px;border-radius:6px}
+.fun .bar b{border-radius:6px}
+.fun small{color:var(--mut)}
+
+/* ---------- Tabelas ---------- */
+.scroll{overflow-x:auto}
+table{width:100%;min-width:560px;border-collapse:collapse}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mut);font-weight:600;font-size:13px}
+td.r,th.r{text-align:right}
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.tools h2{margin:0}
+.empty{color:var(--mut);padding:24px;text-align:center}
+
+.tag{padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.tag.pago{background:rgba(19,128,74,.15);color:var(--up)}
+.tag.pendente{background:rgba(214,150,20,.18);color:var(--warn)}
+.tag.cancelado{background:rgba(194,59,50,.15);color:var(--dn)}
+.tag.man{background:var(--ac2);color:var(--ac);margin-left:4px}
+
+button.x{padding:0 8px;border-color:transparent;background:transparent;color:var(--mut);font-size:18px;line-height:1.4}
+button.x:hover{color:var(--dn)}
+
+/* ---------- Janela de nova venda ---------- */
+dialog{
+  width:min(520px,92vw);
+  border:1px solid var(--line);border-radius:12px;
+  background:var(--card);color:var(--ink);
+  padding:22px;
+}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h2{margin-bottom:16px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form label{display:grid;gap:4px;font-weight:600;font-size:13px;color:var(--mut)}
+.form .full{grid-column:1 / -1}
+.form input,.form select{width:100%}
+.err{color:var(--dn);font-weight:600;min-height:1.4em;margin:10px 0 0}
+
+/* ---------- Responsivo ---------- */
+@media (max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid,.grid2{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .kpis{grid-template-columns:1fr}
+  .row{grid-template-columns:80px 1fr 80px}
+  .row .c{display:none}
+  .form{grid-template-columns:1fr}
+}
+
+/* ---------- Impressão / PDF ---------- */
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .actions,.filters,.dados,dialog,button.x{display:none!important}
+  .card{break-inside:avoid}
+}
+
+/* ---------- Botões de exclusão ---------- */
+button.danger{color:var(--dn);border-color:var(--dn)}
+button.danger:hover{background:var(--dn);color:var(--card)}
+
+/* ---------- Botão marcar pago ---------- */
+button.pay{padding:4px 10px;font-size:12px;font-weight:700;color:var(--up);border-color:var(--up)}
+button.pay:hover{background:var(--up);color:var(--card)}
+@media print{button.pay{display:none!important}}

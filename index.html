@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard de Vendas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Dashboard de vendas</h1>
+      <p class="sub" id="periodo"></p>
+      <p class="sub" id="fonte"></p>
+    </div>
+    <div class="filters">
+      <select id="fPer" aria-label="Período">
+        <option value="7">Últimos 7 dias</option>
+        <option value="30" selected>Últimos 30 dias</option>
+        <option value="90">Últimos 90 dias</option>
+        <option value="365">Últimos 12 meses</option>
+      </select>
+      <select id="fVend" aria-label="Vendedor"></select>
+      <select id="fCanal" aria-label="Canal"></select>
+    </div>
+  </header>
+
+  <div class="actions bar">
+    <button id="btnVenda" type="button" class="btn-p">+ Nova venda</button>
+    <button id="btnExp" type="button">Exportar CSV</button>
+    <button id="btnPdf" type="button">Imprimir / PDF</button>
+    <button id="tema" type="button">Tema</button>
+  </div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Evolução do faturamento</h2>
+      <div class="leg">
+        <span><i></i>Período atual</span>
+        <span><i class="p"></i>Período anterior</span>
+      </div>
+      <div class="chartbox" id="chart"></div>
+    </div>
+
+    <div class="card">
+      <h2>Meta do período</h2>
+      <label class="meta-edit">Meta por vendedor (R$ por dia)
+        <input type="number" id="metaIn" min="1" step="50">
+      </label>
+      <p class="hint" id="metaRef"></p>
+      <div class="big" id="metaV"></div>
+      <div class="bar"><b id="metaB"></b></div>
+      <p class="hint" id="metaT" style="margin-top:8px"></p>
+
+      <h2 style="margin-top:20px">A receber</h2>
+      <p class="hint">Pedidos pendentes, ainda fora do faturamento</p>
+      <div class="big" id="pend"></div>
+    </div>
+  </section>
+
+  <section class="grid2">
+    <div class="card"><h2>Funil de conversão</h2><div class="fun" id="funil"></div></div>
+    <div class="card"><h2>Desempenho por canal</h2><div id="canais"></div></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card"><h2>Ranking de vendedores</h2><div id="vends"></div></div>
+    <div class="card"><h2>Produtos mais vendidos</h2><div class="scroll"><table id="prods"></table></div></div>
+  </section>
+
+  <section class="card">
+    <div class="tools">
+      <h2>Pedidos</h2>
+      <div class="filters">
+        <span class="hint" id="pedInfo" style="margin:0;align-self:center"></span>
+        <select id="fStatus" aria-label="Status">
+          <option value="">Todos os status</option>
+          <option value="pago">Pago</option>
+          <option value="pendente">Pendente</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+    <div class="scroll"><table id="pedidos"></table></div>
+  </section>
+
+  <section class="card dados">
+    <h2>Dados</h2>
+    <p class="hint">Importe um CSV com suas vendas (ele substitui os dados atuais) ou volte aos dados de exemplo.</p>
+    <div class="actions">
+      <button id="btnImp" type="button">Importar CSV</button>
+      <button id="btnModelo" type="button">Baixar modelo</button>
+      <button id="btnReset" type="button">Usar dados de exemplo</button>
+      <input type="file" id="arq" accept=".csv,text/csv" hidden>
+    </div>
+
+    <h2 style="margin-top:20px">Excluir dados</h2>
+    <p class="hint">Dica: exporte o relatório antes de excluir.</p>
+    <div class="actions">
+      <button id="btnLimparManuais" type="button" class="danger">Excluir vendas cadastradas</button>
+      <button id="btnLimparTudo" type="button" class="danger">Excluir todos os dados</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Formulário de nova venda -->
+<dialog id="dlg">
+  <form id="formVenda">
+    <h2>Nova venda</h2>
+    <div class="form">
+      <label>Data <input type="date" id="vData" required></label>
+      <label>Status
+        <select id="vStatus">
+          <option value="pago">Pago</option>
+          <option value="pendente">Pendente</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </label>
+      <label class="full">Produto
+        <input id="vProd" list="dlProd" maxlength="60" autocomplete="off" placeholder="Ex.: Plano Presence" required>
+      </label>
+      <label>Valor (R$) <input type="number" id="vValor" min="0.01" step="0.01" required></label>
+      <label>Canal
+        <input id="vCanal" list="dlCanal" maxlength="60" autocomplete="off" placeholder="Ex.: WhatsApp" required>
+      </label>
+      <label class="full">Vendedor
+        <input id="vVend" list="dlVend" maxlength="60" autocomplete="off" placeholder="Ex.: Ana Lima" required>
+      </label>
+      <datalist id="dlProd"></datalist>
+      <datalist id="dlCanal"></datalist>
+      <datalist id="dlVend"></datalist>
+    </div>
+    <p class="err" id="vErro"></p>
+    <div class="actions end">
+      <button type="button" id="vCancel">Cancelar</button>
+      <button type="submit" class="btn-p">Salvar venda</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>
