@@ -3,117 +3,166 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard de Vendas</title>
+  <meta name="theme-color" content="#0f766e">
+  <meta name="description" content="Dashboard de vendas Potiflux: acompanhe faturamento, conversão, metas, canais e pedidos em um painel simples e responsivo.">
+  <title>Dashboard de Vendas | Potiflux</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-
-  <header>
-    <div>
-      <h1>Dashboard de vendas</h1>
-      <p class="sub" id="periodo"></p>
-      <p class="sub" id="fonte"></p>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<div class="wrap" id="conteudo">
+  <header class="page-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">P</div>
+      <div>
+        <p class="eyebrow">POTIFLUX · INTELIGÊNCIA COMERCIAL</p>
+        <h1>Dashboard de vendas</h1>
+        <p class="sub" id="periodo" aria-live="polite"></p>
+        <p class="sub source-line" id="fonte" aria-live="polite"></p>
+      </div>
     </div>
-    <div class="filters">
+    <div class="filters" aria-label="Filtros principais">
+      <label class="sr-only" for="fPer">Período</label>
       <select id="fPer" aria-label="Período">
         <option value="7">Últimos 7 dias</option>
         <option value="30" selected>Últimos 30 dias</option>
         <option value="90">Últimos 90 dias</option>
         <option value="365">Últimos 12 meses</option>
       </select>
+      <label class="sr-only" for="fVend">Vendedor</label>
       <select id="fVend" aria-label="Vendedor"></select>
+      <label class="sr-only" for="fCanal">Canal</label>
       <select id="fCanal" aria-label="Canal"></select>
     </div>
   </header>
 
-  <div class="actions bar">
-    <button id="btnVenda" type="button" class="btn-p">+ Nova venda</button>
-    <button id="btnExp" type="button">Exportar CSV</button>
-    <button id="btnPdf" type="button">Imprimir / PDF</button>
-    <button id="tema" type="button">Tema</button>
+  <div class="actions bar toolbar" aria-label="Ações do dashboard">
+    <button id="btnVenda" type="button" class="btn-p">＋ Nova venda</button>
+    <div class="toolbar-secondary">
+      <button id="btnExp" type="button">Exportar CSV</button>
+      <button id="btnPdf" type="button">Imprimir / PDF</button>
+      <button id="tema" type="button" aria-label="Alternar tema claro e escuro">◐ Tema</button>
+    </div>
   </div>
 
-  <section class="kpis" id="kpis"></section>
+  <section class="kpis" id="kpis" aria-label="Indicadores principais" aria-live="polite"></section>
 
   <section class="grid">
-    <div class="card">
-      <h2>Evolução do faturamento</h2>
+    <div class="card chart-card">
+      <div class="section-heading">
+        <div><p class="eyebrow">VISÃO GERAL</p><h2>Evolução do faturamento</h2></div>
+        <span class="section-icon" aria-hidden="true">↗</span>
+      </div>
       <div class="leg">
         <span><i></i>Período atual</span>
         <span><i class="p"></i>Período anterior</span>
       </div>
       <div class="chartbox" id="chart"></div>
     </div>
-
-    <div class="card">
-      <h2>Meta do período</h2>
-      <label class="meta-edit">Meta por vendedor (R$ por dia)
-        <input type="number" id="metaIn" min="1" step="50">
+    <div class="card goal-card">
+      <div class="section-heading">
+        <div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Meta do período</h2></div>
+        <span class="section-icon" aria-hidden="true">◎</span>
+      </div>
+      <label class="meta-edit" for="metaIn">Meta por vendedor (R$ por dia)
+        <input type="number" id="metaIn" min="1" max="1000000" step="50" inputmode="decimal">
       </label>
       <p class="hint" id="metaRef"></p>
-      <div class="big" id="metaV"></div>
-      <div class="bar"><b id="metaB"></b></div>
+      <div class="big" id="metaV" aria-live="polite"></div>
+      <div class="bar progress-track" role="progressbar" aria-label="Progresso da meta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><b id="metaB"></b></div>
       <p class="hint" id="metaT" style="margin-top:8px"></p>
-
-      <h2 style="margin-top:20px">A receber</h2>
-      <p class="hint">Pedidos pendentes, ainda fora do faturamento</p>
-      <div class="big" id="pend"></div>
+      <div class="receivable">
+        <h2>A receber</h2>
+        <p class="hint">Pedidos pendentes, ainda fora do faturamento</p>
+        <div class="big" id="pend"></div>
+      </div>
     </div>
   </section>
 
   <section class="grid2">
-    <div class="card"><h2>Funil de conversão</h2><div class="fun" id="funil"></div></div>
-    <div class="card"><h2>Desempenho por canal</h2><div id="canais"></div></div>
+    <div class="card">
+      <div class="section-heading"><div><p class="eyebrow">JORNADA COMERCIAL</p><h2>Funil de conversão</h2></div></div>
+      <div class="fun" id="funil"></div>
+    </div>
+    <div class="card">
+      <div class="section-heading"><div><p class="eyebrow">ORIGEM DA RECEITA</p><h2>Desempenho por canal</h2></div></div>
+      <div id="canais"></div>
+    </div>
   </section>
 
-  <section class="grid2">
-    <div class="card"><h2>Ranking de vendedores</h2><div id="vends"></div></div>
-    <div class="card"><h2>Produtos mais vendidos</h2><div class="scroll"><table id="prods"></table></div></div>
+  <section class="grid2 split">
+    <div class="card">
+      <div class="section-heading"><div><p class="eyebrow">RESULTADOS DA EQUIPE</p><h2>Ranking de vendedores</h2></div></div>
+      <div id="vends"></div>
+    </div>
+    <div class="card">
+      <div class="section-heading"><div><p class="eyebrow">PORTFÓLIO</p><h2>Faturamento por produto</h2></div></div>
+      <div class="prod-wrap">
+        <div class="donut" id="rosca"></div>
+        <div class="scroll"><table id="prods"></table></div>
+      </div>
+    </div>
   </section>
 
   <section class="card">
     <div class="tools">
-      <h2>Pedidos</h2>
+      <div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Pedidos</h2></div>
       <div class="filters">
         <span class="hint" id="pedInfo" style="margin:0;align-self:center"></span>
+        <label class="sr-only" for="fStatus">Filtrar por status</label>
         <select id="fStatus" aria-label="Status">
           <option value="">Todos os status</option>
           <option value="pago">Pago</option>
           <option value="pendente">Pendente</option>
           <option value="cancelado">Cancelado</option>
         </select>
+        <label class="sr-only" for="fTam">Linhas por página</label>
+        <select id="fTam" aria-label="Linhas por página">
+          <option value="10">10 por página</option>
+          <option value="25">25 por página</option>
+          <option value="50">50 por página</option>
+        </select>
       </div>
     </div>
     <div class="scroll"><table id="pedidos"></table></div>
+    <div class="pager" id="pager">
+      <button id="pgPrev" type="button">‹ Anterior</button>
+      <span id="pgInfo" aria-live="polite"></span>
+      <button id="pgNext" type="button">Próxima ›</button>
+    </div>
   </section>
 
   <section class="card dados">
-    <h2>Dados</h2>
-    <p class="hint">Importe um CSV com suas vendas (ele substitui os dados atuais) ou volte aos dados de exemplo.</p>
+    <div class="section-heading"><div><p class="eyebrow">CONTROLE E MANUTENÇÃO</p><h2>Dados do dashboard</h2></div></div>
+    <p class="hint">Importe um CSV para substituir os dados-base ou restaure os dados de demonstração. As vendas cadastradas manualmente são mantidas separadamente.</p>
     <div class="actions">
       <button id="btnImp" type="button">Importar CSV</button>
-      <button id="btnModelo" type="button">Baixar modelo</button>
+      <button id="btnModelo" type="button">Baixar modelo CSV</button>
       <button id="btnReset" type="button">Usar dados de exemplo</button>
       <input type="file" id="arq" accept=".csv,text/csv" hidden>
     </div>
-
-    <h2 style="margin-top:20px">Excluir dados</h2>
-    <p class="hint">Dica: exporte o relatório antes de excluir.</p>
-    <div class="actions">
-      <button id="btnLimparManuais" type="button" class="danger">Excluir vendas cadastradas</button>
-      <button id="btnLimparTudo" type="button" class="danger">Excluir todos os dados</button>
+    <div class="danger-zone">
+      <h2>Zona de exclusão</h2>
+      <p class="hint">Estas ações não podem ser desfeitas. Exporte seus dados antes de continuar.</p>
+      <div class="actions">
+        <button id="btnLimparManuais" type="button" class="danger">Excluir vendas cadastradas</button>
+        <button id="btnLimparTudo" type="button" class="danger">Excluir todos os dados</button>
+      </div>
     </div>
+    <p class="footnote">Os dados são armazenados neste navegador. Para sincronização entre dispositivos, será necessário integrar um backend.</p>
   </section>
-
+  <footer class="page-footer"><span>Potiflux · Dashboard de Vendas</span><span>Indicadores atualizados com os dados carregados</span></footer>
 </div>
 
-<!-- Formulário de nova venda -->
-<dialog id="dlg">
+<!-- Nova venda / editar venda -->
+<dialog id="dlg" aria-labelledby="dialogTitle">
   <form id="formVenda">
-    <h2>Nova venda</h2>
+    <div class="section-heading">
+      <div><p class="eyebrow">REGISTRO COMERCIAL</p><h2 id="dialogTitle">Nova venda</h2></div>
+      <button type="button" id="vCancelTop" class="icon-button" aria-label="Fechar formulário">×</button>
+    </div>
     <div class="form">
-      <label>Data <input type="date" id="vData" required></label>
+      <label>Data do pedido <input type="date" id="vData" required></label>
       <label>Status
         <select id="vStatus">
           <option value="pago">Pago</option>
@@ -124,25 +173,41 @@
       <label class="full">Produto
         <input id="vProd" list="dlProd" maxlength="60" autocomplete="off" placeholder="Ex.: Plano Presence" required>
       </label>
-      <label>Valor (R$) <input type="number" id="vValor" min="0.01" step="0.01" required></label>
+      <label>Valor (R$) <input type="number" id="vValor" min="0.01" max="1000000000000" step="0.01" inputmode="decimal" required></label>
+      <label id="boxPag">Data do pagamento <input type="date" id="vPag"></label>
       <label>Canal
         <input id="vCanal" list="dlCanal" maxlength="60" autocomplete="off" placeholder="Ex.: WhatsApp" required>
       </label>
-      <label class="full">Vendedor
+      <label>Vendedor
         <input id="vVend" list="dlVend" maxlength="60" autocomplete="off" placeholder="Ex.: Ana Lima" required>
       </label>
       <datalist id="dlProd"></datalist>
       <datalist id="dlCanal"></datalist>
       <datalist id="dlVend"></datalist>
     </div>
-    <p class="err" id="vErro"></p>
+    <p class="err" id="vErro" role="alert"></p>
     <div class="actions end">
       <button type="button" id="vCancel">Cancelar</button>
-      <button type="submit" class="btn-p">Salvar venda</button>
+      <button type="submit" id="vSalvar" class="btn-p">Salvar venda</button>
     </div>
   </form>
 </dialog>
 
-<script src="script.js"></script>
+<!-- Marcar como pago -->
+<dialog id="dlgPag" aria-labelledby="pagTitle">
+  <form id="formPag">
+    <div class="section-heading">
+      <div><p class="eyebrow">CONFIRMAÇÃO</p><h2 id="pagTitle">Marcar como pago</h2></div>
+    </div>
+    <p class="hint" id="pagInfo"></p>
+    <label class="field">Data do pagamento <input type="date" id="pagData" required></label>
+    <p class="err" id="pagErro" role="alert"></p>
+    <div class="actions end">
+      <button type="button" id="pagCancel">Cancelar</button>
+      <button type="submit" class="btn-p">Confirmar pagamento</button>
+    </div>
+  </form>
+</dialog>
+<script src="script.js" defer></script>
 </body>
 </html>
