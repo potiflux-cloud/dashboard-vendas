@@ -1,0 +1,41 @@
+# ---------- Sistema operacional ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ---------- Editores e IDEs ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---------- Dependências e builds (se o projeto ganhar ferramentas) ----------
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+
+# ---------- Logs ----------
+*.log
+npm-debug.log*
+
+# ---------- Segredos e configurações locais ----------
+.env
+.env.*
+!.env.example
+*.local
+
+# ---------- Dados reais de vendas (nunca versionar) ----------
+# Relatórios exportados pelo painel e arquivos de importação com dados de clientes
+pedidos_*.csv
+vendas-*.csv
+dados-reais/
+# O modelo de CSV (modelo-vendas.csv) e os prints em docs/prints/ continuam versionados
+
+# ---------- Arquivos temporários ----------
+*.tmp
+*.bak
+*.orig
